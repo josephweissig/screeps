@@ -1,6 +1,6 @@
 var common = {
 
-    parts: [WORK,CARRY,MOVE,CARRY,WORK,MOVE,WORK,CARRY,WORK,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY],
+    // parts: [WORK,CARRY,MOVE,CARRY,WORK,MOVE,WORK,CARRY,WORK,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY],
 
     /** @param {Creep} creep */
     run: function(creep) {
@@ -21,6 +21,14 @@ var common = {
                 break;
             default:
                 break;
+        }
+    },
+
+    /** @param {Creep} creep */
+    roadCheck: function(creep) {
+        const road = creep.room.lookForAt(LOOK_STRUCTURES, creep.pos);
+        if (road.length == 0) {
+            creep.room.createConstructionSite(creep.pos, STRUCTURE_ROAD);
         }
     },
 
