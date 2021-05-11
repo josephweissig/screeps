@@ -1,4 +1,4 @@
-var common = require('common');
+var commonModule = require('commonModule');
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
@@ -34,7 +34,7 @@ module.exports.loop = function () {
 
     if (harvester.length < 1) {
         // console.log("We should build the biggest harvester we can with our current energy!");
-        nextSpawn = "🚨⛏"
+        nextSpawn = "🚨"
         var newName = "Harvester" + Game.time;
         // Game.spawns['Spawn1'].spawnCreep(parts, newName, {memory: {role: 'harvester'}});
         var partArray = parts;
