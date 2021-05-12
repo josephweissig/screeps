@@ -1,3 +1,5 @@
+let common = require('common');
+
 var roleUpgrader = {
 
     /** @param {Creep} creep **/
@@ -18,7 +20,7 @@ var roleUpgrader = {
             }
         }
         else {
-            var mineral = creep.pos.findClosestByRange(FIND_SOURCES);
+            let mineral = common.getPreferredSource(creep.room, true);
             if (mineral) {
                 if (creep.harvest(mineral) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(mineral, {visualizePathStyle: {sroke: '#ffffff'}});

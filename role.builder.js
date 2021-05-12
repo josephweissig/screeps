@@ -6,6 +6,7 @@
  * var mod = require('role.builder');
  * mod.thing == 'a thing'; // true
  */
+let common = require('common');
 
 var roleBuilder = {
 
@@ -28,7 +29,8 @@ var roleBuilder = {
                 }
             }
         } else {
-            var mineral = creep.pos.findClosestByPath(FIND_SOURCES);
+            // var mineral = creep.pos.findClosestByPath(FIND_SOURCES);
+            let mineral = common.getPreferredSource(creep.room, true);
             if (mineral) {
                 if (creep.harvest(mineral) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(mineral, {visualizePathStyle: {sroke: '#ffffff'}});

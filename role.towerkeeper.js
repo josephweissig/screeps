@@ -2,15 +2,61 @@ var towerkeeper = {
 
     /** @param {Creep} creep */
     run: function(creep) {
-        if(creep.store.getFreeCapacity() > 0) {
-            var mineral = creep.pos.findClosestByPath(FIND_SOURCES);
-            if (mineral) {
-                if (creep.harvest(mineral) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(mineral, {visualizePathStyle: {sroke: '#ffffff'}});
+
+        // TODO: tombstone checking and gathering
+        let tombstones = creep.room.find(FIND_TOMBSTONES);
+        for (let tombstone in tombstones) {
+            if (creep.store.getFreeCapacity() > 0) {
+                
+            }
+        }
+
+        if(creep.store.getFreeCapacity() == creep.store.getCapacity()) {
+
+            // let otherResource = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
+            //     filter: (resource) => {
+            //         otherResource
+            //     }
+            // })
+
+            let energy = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES);
+            if (creep.pickup(energy) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(energy.pos);
+                return;
+                
+            }
+            var storage = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.structureType == STRUCTURE_STORAGE) && 
+                        structure.store.getUsedCapacity() > 0;
+                }
+            });
+            if (storage) {
+                let result = creep.withdraw(storage, RESOURCE_ENERGY, creep.store.getFreeCapacity());
+                if (result == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(storage, {visualizePathStyle: {stroke: '#ffffff'}});
+                } else if (result == ERR_NOT_ENOUGH_RESOURCES) {
+                    result = creep.withdraw(storage, RESOURCE_ENERGY, storage.store.getUsedCapacity());
                 }
             }
         }
         else {
+            // console.log("Energy " + creep.store[RESOURCE_ENERGY]);
+            // console.log("All Res " + creep.store.getUsedCapacity());
+            // if (creep.store.getUsedCapacity() > creep.store[RESOURCE_ENERGY]) {
+            //     let storage = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+            //         filter: (structure) => {
+            //             return structure.structureType == STRUCTURE_CONTAINER &&
+            //             structure.store.getUsedCapacity() == 0;
+            //         }
+            //     })
+            //     let transferResult = creep.transfer(storage, RESOURCE_GHODIUM_OXIDE);
+            //     console.log("Transfer result: " + transferResult);
+            //     if (transferResult == ERR_NOT_IN_RANGE) {
+            //         creep.moveTo(storage);
+            //     }
+            //     return;
+            // }
             const target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType == STRUCTURE_TOWER) &&
@@ -28,14 +74,14 @@ var towerkeeper = {
                 if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
-            } else {
-                creep.moveTo(Game.spawns['Spawn1'].pos.x, Game.spawn['Spawn1'].pos.y + 1);
             }
         }
 
-        const found = creep.room.lookForAt(LOOK_STRUCTURES, creep.pos);
-        if (found.length == 0) {
-            creep.room.createConstructionSite(creep.pos, STRUCTURE_ROAD);
-        }
+        // const found = creep.room.lookForAt(LOOK_STRUCTURES, creep.pos);
+        // if (found.length == 0) {
+        //     creep.room.createConstructionSite(creep.pos, STRUCTURE_ROAD);
+        // }
     }
 }
+
+module.exports = towerkeeper;

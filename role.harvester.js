@@ -6,7 +6,7 @@ var roleHarvester = {
     run: function(creep) {
 
         if(creep.memory.seekSource) {
-            const mineral = common.getFarthestSource(creep.room);
+            const mineral = common.getPreferredSource(creep.room, false);
             if (creep.harvest(mineral) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(mineral, {visualizePathStyle: {sroke: '#ffffff'}});
             }
@@ -20,8 +20,7 @@ var roleHarvester = {
             const target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType == STRUCTURE_EXTENSION 
-                        || structure.structureType == STRUCTURE_SPAWN
-                        || structure.structureType == STRUCTURE_TOWER) &&
+                        || structure.structureType == STRUCTURE_SPAWN) &&
                         structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
                 }
             })
@@ -37,7 +36,19 @@ var roleHarvester = {
                     creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             } else {
-                creep.moveTo(Game.spawns['Spawn1'].pos.x, Game.spawns['Spawn1'].pos.y + 1);
+                const lesserTarget = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return (structure.structureType == STRUCTURE_STORAGE) && 
+                            structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                    }
+                })
+                if (lesserTarget != null) {
+                    if (creep.transfer(lesserTarget, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(lesserTarget, {visualizePathStyle: {stroke: '#ffffff'}});
+                    }
+                } else {
+                    creep.moveTo(Game.spawns['Spawn1'].pos.x, Game.spawns['Spawn1'].pos.y + 1);
+                }
             }
             if (creep.store.getUsedCapacity() <= 0) {
                 creep.memory.depositEnergy = false;

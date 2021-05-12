@@ -3,6 +3,7 @@ var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleTower = require('role.tower');
+var roleTowerkeeper = require('role.towerkeeper');
 
 module.exports.loop = function () {
 
@@ -13,7 +14,7 @@ module.exports.loop = function () {
         }
     }
 
-    const parts = [WORK,CARRY,MOVE,CARRY,WORK,MOVE,WORK,CARRY,WORK,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY];
+    const parts = [WORK,CARRY,MOVE,CARRY,WORK,MOVE,WORK,CARRY,MOVE,MOVE,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,WORK,CARRY,MOVE,CARRY,CARRY];
     
     const room = Game.spawns['Spawn1'].room;
     // const numCreeps = Object.keys(Memory.creeps).length;
@@ -21,6 +22,7 @@ module.exports.loop = function () {
     var upgrader = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
     var harvester = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
     var builder = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
+    var towerkeeper = _.filter(Game.creeps, (creep) => creep.memory.role == 'towerkeeper');
 
     let nextSpawn = "";
 
@@ -47,10 +49,15 @@ module.exports.loop = function () {
         var newName = "Harvester" + Game.time;
         Game.spawns['Spawn1'].spawnCreep(parts, newName, {memory: {role: 'harvester', seekSource: true, depositEnergy: false}});
     } else {
+        if (towerkeeper.length < 1) {
+            nextSpawn = "🧙‍♂️"
+            var newName = "TowerKeeper" + Game.time;
+            Game.spawns['Spawn1'].spawnCreep([TOUGH,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], newName, {memory: {role: 'towerkeeper'}});
+        }
 
         // Prioritize 
         if (room.find(FIND_CONSTRUCTION_SITES).length > 0) {
-            if (builder.length < 2) {
+            if (builder.length < 1) {
                 // console.log("We should build a builder!");
                 nextSpawn = "🚧"
                 var newName = "Builder" + Game.time;
@@ -102,13 +109,16 @@ module.exports.loop = function () {
         common.run(creep);
         if(creep.memory.role == 'harvester') {
             roleHarvester.run(creep);
-            common.roadCheck(creep);
+            // common.roadCheck(creep);
         }
         if(creep.memory.role == 'upgrader') {
             roleUpgrader.run(creep);
         }
         if(creep.memory.role == 'builder') {
             roleBuilder.run(creep);
+        }
+        if(creep.memory.role == 'towerkeeper') {
+            roleTowerkeeper.run(creep);
         }
     }
 

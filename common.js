@@ -38,7 +38,12 @@ var common = {
      * @returns {RoomPosition}
      */
     getCloseSource: function(room) {
-        return room.lookForAt(LOOK_SOURCES, 9, 23)[0];
+        let primarySource = room.lookForAt(LOOK_SOURCES, 9, 23)[0];
+        if (primarySource.energy > 0) {
+            return primarySource;
+        } else {
+            return this.getFarthestSource(room);
+        }
     },
 
     /** 
@@ -48,6 +53,30 @@ var common = {
      */
     getFarthestSource: function(room) {
         return room.lookForAt(LOOK_SOURCES, 4, 21)[0];
+    },
+
+    /**
+     * Finds the preferred source in a room based on if you want the closest or furthest.
+     * @param {Room} room 
+     * @param {Boolean} prefClosest
+     * @returns {RoomPosition}
+     */
+    getPreferredSource: function(room, prefClosest) {
+        const closest = room.lookForAt(LOOK_SOURCES, 9, 23)[0];
+        const farthest = room.lookForAt(LOOK_SOURCES, 4, 21)[0];
+        if (prefClosest) {
+            if (closest.energy > 0) {
+                return closest;
+            } else if (farthest.energy > 0) {
+                return farthest;
+            }
+        } else {
+            if (farthest.energy > 0) {
+                return farthest;
+            } else if (closest.energy > 0) {
+                return closest;
+            }
+        }
     }
 }
 
