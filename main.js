@@ -14,7 +14,9 @@ module.exports.loop = function () {
         }
     }
 
-    const parts = [WORK,CARRY,MOVE,CARRY,WORK,MOVE,WORK,CARRY,MOVE,MOVE,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,WORK,CARRY,MOVE,CARRY,CARRY];
+    // const parts = [WORK,CARRY,MOVE,CARRY,WORK,MOVE,WORK,CARRY,MOVE,MOVE,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,WORK,CARRY,MOVE,CARRY,CARRY];
+    const parts = [WORK,CARRY,MOVE,CARRY,WORK,MOVE,WORK,CARRY,MOVE,MOVE,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE];
+    // const parts = [WORK,CARRY,MOVE,CARRY,WORK,MOVE,WORK,CARRY,MOVE,MOVE,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY,WORK,MOVE];
     
     const room = Game.spawns['Spawn1'].room;
     // const numCreeps = Object.keys(Memory.creeps).length;
@@ -57,7 +59,7 @@ module.exports.loop = function () {
 
         // Prioritize 
         if (room.find(FIND_CONSTRUCTION_SITES).length > 0) {
-            if (builder.length < 1) {
+            if (builder.length < 2) {
                 // console.log("We should build a builder!");
                 nextSpawn = "🚧"
                 var newName = "Builder" + Game.time;
@@ -77,7 +79,7 @@ module.exports.loop = function () {
                 })
             }
         
-            if (upgrader.length < 2) {
+            if (upgrader.length < 1) {
                 // console.log("We should build an upgrader!");
                 nextSpawn = "⚡"
                 var newName = "BigUpgrader" + Game.time;
@@ -106,7 +108,7 @@ module.exports.loop = function () {
 
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
-        common.run(creep);
+        // commonModule.run(creep);
         if(creep.memory.role == 'harvester') {
             roleHarvester.run(creep);
             // common.roadCheck(creep);
@@ -126,4 +128,17 @@ module.exports.loop = function () {
         filter: { structureType: STRUCTURE_TOWER }
     })[0];
     roleTower.run(tower);
+
+    let storage = room.find(FIND_STRUCTURES, {
+        filter: (structure) => {
+            return structure.structureType == STRUCTURE_STORAGE;
+    }})
+    if (storage[0]) {
+        room.visual.text(
+            storage[0].store.getUsedCapacity(),
+            storage[0].pos.x + 1,
+            storage[0].pos.y + 0.5,
+            {align: 'left', opacity: 0.75, font: '12px'}
+        );
+    }
 }

@@ -60,7 +60,7 @@ var towerkeeper = {
             const target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType == STRUCTURE_TOWER) &&
-                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > (structure.store.getCapacity() / 2);
                 }
             })
             // if(targets.length > 0) {

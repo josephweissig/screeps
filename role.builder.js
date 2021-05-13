@@ -6,7 +6,7 @@
  * var mod = require('role.builder');
  * mod.thing == 'a thing'; // true
  */
-let common = require('common');
+let commonModule = require('commonModule');
 
 var roleBuilder = {
 
@@ -30,11 +30,20 @@ var roleBuilder = {
             }
         } else {
             // var mineral = creep.pos.findClosestByPath(FIND_SOURCES);
-            let mineral = common.getPreferredSource(creep.room, true);
-            if (mineral) {
-                if (creep.harvest(mineral) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(mineral, {visualizePathStyle: {sroke: '#ffffff'}});
+            // let mineral = commonModule.getPreferredSource(creep.room, true);
+            // if (mineral) {
+            //     if (creep.harvest(mineral) == ERR_NOT_IN_RANGE) {
+            //         creep.moveTo(mineral, {visualizePathStyle: {stroke: '#ffffff'}});
+            //     }
+            // }
+            var storage = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.structureType == STRUCTURE_STORAGE) && 
+                        structure.store.getUsedCapacity() > 0;
                 }
+            });
+            if (creep.withdraw(storage, RESOURCE_ENERGY, creep.store.getFreeCapacity()) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(storage, { visualizePathStyle: {stroke: '#ffffff'}});
             }
         }
     }

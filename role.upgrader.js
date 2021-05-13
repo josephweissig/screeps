@@ -1,4 +1,4 @@
-let common = require('common');
+let commonModule = require('commonModule');
 
 var roleUpgrader = {
 
@@ -20,7 +20,7 @@ var roleUpgrader = {
             }
         }
         else {
-            let mineral = common.getPreferredSource(creep.room, true);
+            let mineral = commonModule.getPreferredSource(creep.room, true);
             if (mineral) {
                 if (creep.harvest(mineral) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(mineral, {visualizePathStyle: {sroke: '#ffffff'}});

@@ -29,12 +29,13 @@ var roleTower = {
                 structure.structureType == STRUCTURE_RAMPART;
             }
         })
-        const brokenWall = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-            filter: (structure) => {
-                return (structure.hits < structure.hitsMax) &&
-                structure.structureType == STRUCTURE_WALL;
-            }
-        })
+        // const brokenWall = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+        //     filter: (structure) => {
+        //         return (structure.hits < structure.hitsMax) &&
+        //         structure.structureType == STRUCTURE_WALL;
+        //     }
+        // })
+        const brokenWall = null;
 
         if (invader) {
             tower.attack(invader);

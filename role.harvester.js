@@ -1,4 +1,4 @@
-var common = require('common');
+var commonModule = require('commonModule');
 
 var roleHarvester = {
 
@@ -6,7 +6,7 @@ var roleHarvester = {
     run: function(creep) {
 
         if(creep.memory.seekSource) {
-            const mineral = common.getPreferredSource(creep.room, false);
+            const mineral = commonModule.getPreferredSource(creep.room, false);
             if (creep.harvest(mineral) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(mineral, {visualizePathStyle: {sroke: '#ffffff'}});
             }
