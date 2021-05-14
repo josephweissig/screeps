@@ -26,6 +26,7 @@ var roleTower = {
         const brokenRampart = tower.pos.findClosestByRange(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.hits < structure.hitsMax) &&
+                (structure.hits < 10000000) &&
                 structure.structureType == STRUCTURE_RAMPART;
             }
         })

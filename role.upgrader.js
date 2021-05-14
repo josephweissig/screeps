@@ -20,11 +20,14 @@ var roleUpgrader = {
             }
         }
         else {
-            let mineral = commonModule.getPreferredSource(creep.room, true);
-            if (mineral) {
-                if (creep.harvest(mineral) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(mineral, {visualizePathStyle: {sroke: '#ffffff'}});
+            var storage = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.structureType == STRUCTURE_STORAGE) && 
+                        structure.store.getUsedCapacity() > 0;
                 }
+            });
+            if (creep.withdraw(storage, RESOURCE_ENERGY, creep.store.getFreeCapacity()) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(storage, { visualizePathStyle: {stroke: '#ffffff'}});
             }
         }
 	}

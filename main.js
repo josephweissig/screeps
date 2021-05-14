@@ -14,9 +14,7 @@ module.exports.loop = function () {
         }
     }
 
-    // const parts = [WORK,CARRY,MOVE,CARRY,WORK,MOVE,WORK,CARRY,MOVE,MOVE,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,WORK,CARRY,MOVE,CARRY,CARRY];
-    const parts = [WORK,CARRY,MOVE,CARRY,WORK,MOVE,WORK,CARRY,MOVE,MOVE,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE];
-    // const parts = [WORK,CARRY,MOVE,CARRY,WORK,MOVE,WORK,CARRY,MOVE,MOVE,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY,WORK,MOVE];
+    const parts = [WORK,CARRY,MOVE,CARRY,WORK,MOVE,WORK,CARRY,MOVE,MOVE,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY,WORK,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY];
     
     const room = Game.spawns['Spawn1'].room;
     // const numCreeps = Object.keys(Memory.creeps).length;
@@ -45,7 +43,7 @@ module.exports.loop = function () {
         while (Game.spawns['Spawn1'].spawnCreep(partArray, newName, {memory: {role: 'harvester', seekSource: true, depositEnergy: false}}) == ERR_NOT_ENOUGH_ENERGY && partArray.length > 3) {
             partArray.pop();
         }
-    } else if (harvester.length < 2) {
+    } else if (harvester.length < 3) {
         // console.log("We should build a bigger harvester!");
         nextSpawn = "⛏"
         var newName = "Harvester" + Game.time;
@@ -79,7 +77,7 @@ module.exports.loop = function () {
                 })
             }
         
-            if (upgrader.length < 1) {
+            if (upgrader.length < 2) {
                 // console.log("We should build an upgrader!");
                 nextSpawn = "⚡"
                 var newName = "BigUpgrader" + Game.time;
